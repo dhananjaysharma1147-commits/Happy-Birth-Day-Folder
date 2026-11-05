@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Special Surprise Just For You ✨🎂</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Pacifico, Poppins & Dancing Script -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Pacifico&family=Poppins:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
+    
+    .font-cursive {
+      font-family: 'Pacifico', cursive;
+    }
+
+    .font-handwriting {
+      font-family: 'Dancing Script', cursive;
+    }
+
+    /* Subtle floating animation */
+    @keyframes floatSoft {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(1.5deg); }
+    }
+    .animate-float {
+      animation: floatSoft 3.5s ease-in-out infinite;
+    }
+
+    /* Sway animation for hanging photos */
+    @keyframes sway {
+      0% { transform: rotate(-3deg); }
+      50% { transform: rotate(3deg); }
+      100% { transform: rotate(-3deg); }
+    }
+    .sway-slow-1 { animation: sway 4s ease-in-out infinite; transform-origin: top center; }
+    .sway-slow-2 { animation: sway 3.5s ease-in-out infinite 0.7s; transform-origin: top center; }
+    .sway-slow-3 { animation: sway 4.2s ease-in-out infinite 1.3s; transform-origin: top center; }
+
+    /* Candle Flame Flickering */
+    @keyframes flicker {
+      0%, 100% { transform: scale(1) rotate(-1deg); opacity: 0.95; }
+      25% { transform: scale(1.1, 0.9) rotate(2deg); opacity: 1; }
+      50% { transform: scale(0.95, 1.15) rotate(-2deg); opacity: 0.9; }
+      75% { transform: scale(1.05, 1) rotate(1deg); opacity: 1; }
+    }
+    .flame-flicker {
+      animation: flicker 1.1s ease-in-out infinite alternate;
+      transform-origin: bottom center;
+    }
+
+    /* Smoke puff after blow */
+    @keyframes smokeRise {
+      0% { transform: translateY(0) scale(0.6); opacity: 0.8; }
+      50% { opacity: 0.5; }
+      100% { transform: translateY(-40px) scale(2); opacity: 0; }
+    }
+    .smoke-anim {
+      animation: smokeRise 1.6s ease-out forwards;
+    }
+
+    /* Glassmorphism custom styling */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    /* Custom scrollbar for gallery and modals */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #f472b6;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-pink-100 via-rose-50 to-indigo-100 min-h-screen text-slate-800 flex flex-col justify-between relative overflow-x-hidden">
+
+  <!-- Background decorative floating elements -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <div class="absolute top-10 left-[10%] text-pink-300 opacity-60 text-3xl animate-bounce" style="animation-duration: 4s;">✨</div>
+    <div class="absolute top-40 right-[15%] text-purple-300 opacity-70 text-4xl animate-bounce" style="animation-duration: 5s;">🌸</div>
+    <div class="absolute bottom-20 left-[8%] text-rose-300 opacity-50 text-2xl animate-float">💖</div>
+    <div class="absolute top-1/2 right-[8%] text-amber-300 opacity-60 text-3xl animate-float" style="animation-delay: 1.5s;">⭐</div>
+    <div class="absolute -bottom-10 -right-10 w-96 h-96 bg-pink-200/40 rounded-full blur-3xl"></div>
+    <div class="absolute -top-10 -left-10 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl"></div>
+  </div>
+
+  <!-- Audio Toggle (Web Audio API Synthesizer) -->
+  <header class="relative z-50 p-4 flex justify-between items-center max-w-4xl mx-auto w-full">
+    <div class="flex items-center gap-2 bg-white/70 backdrop-blur-md px-3 py-1.5 rounded-full shadow-sm text-xs md:text-sm font-medium text-pink-600 border border-pink-200">
+      <span class="inline-block w-2 h-2 rounded-full bg-pink-500 animate-ping"></span>
+      Special Moment In Progress ✨
+    </div>
+    <button id="soundToggleBtn" onclick="toggleMute()" class="flex items-center gap-1.5 bg-white/80 hover:bg-white text-slate-700 px-3.5 py-1.5 rounded-full shadow-sm border border-slate-200 text-xs transition active:scale-95">
+      <i data-lucide="volume-2" class="w-4 h-4 text-pink-500"></i>
+      <span id="soundStatusText">Sound On</span>
+    </button>
+  </header>
+
+  <!-- MAIN MULTI-STAGE APP CONTAINER -->
+  <main class="relative z-10 flex-grow flex items-center justify-center p-4">
+
+    <!-- ================= STAGE 1: COUNTDOWN TIMER (11:59:50 -> 12:00:00) ================= -->
+    <section id="stage1" class="w-full max-w-lg transition-all duration-700 transform flex flex-col items-center">
+      <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-2xl text-center border-2 border-pink-200/70 w-full relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-28 h-28 bg-pink-300/30 rounded-full blur-xl"></div>
+        
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-pink-100 text-pink-700 text-xs font-semibold rounded-full uppercase tracking-wider mb-4">
+          <i data-lucide="clock" class="w-3.5 h-3.5"></i> Almost Midnight!
+        </span>
+        
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 mb-2">Hold Your Breath...</h2>
+        <p class="text-slate-600 text-sm mb-6">Something magical is about to unlock in seconds!</p>
+
+        <!-- Digital Clock Display -->
+        <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-2xl p-6 sm:p-8 shadow-inner border border-indigo-800/50 mb-6 flex flex-col items-center justify-center relative">
+          <div class="text-xs uppercase tracking-widest text-pink-300 font-mono mb-2 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> SYSTEM SYNCHRONIZING
+          </div>
+          <div id="clockDisplay" class="font-mono text-4xl sm:text-6xl font-extrabold tracking-wider text-pink-400 drop-shadow-[0_0_12px_rgba(244,114,182,0.6)]">
+            11:59:50
+          </div>
+          <div class="w-full bg-slate-800 h-2 rounded-full mt-5 overflow-hidden">
+            <div id="timerProgress" class="bg-gradient-to-r from-pink-500 to-purple-400 h-full w-0 transition-all duration-1000"></div>
+          </div>
+        </div>
+
+        <!-- Cute Mascot ticking down -->
+        <div class="flex items-center justify-center gap-3 text-slate-700 bg-pink-50/80 p-3 rounded-2xl border border-pink-200">
+          <div class="w-12 h-12 flex-shrink-0 animate-bounce">
+            <!-- Cute SVG Clock Bear -->
+            <svg viewBox="0 0 100 100" class="w-full h-full">
+              <circle cx="28" cy="28" r="16" fill="#f87171"/>
+              <circle cx="72" cy="28" r="16" fill="#f87171"/>
+              <circle cx="28" cy="28" r="8" fill="#fbcfe8"/>
+              <circle cx="72" cy="28" r="8" fill="#fbcfe8"/>
+              <circle cx="50" cy="55" r="35" fill="#fca5a5"/>
+              <circle cx="40" cy="50" r="4" fill="#1e1b4b"/>
+              <circle cx="60" cy="50" r="4" fill="#1e1b4b"/>
+              <ellipse cx="50" cy="62" rx="10" ry="7" fill="#fff"/>
+              <circle cx="50" cy="60" r="3" fill="#1e1b4b"/>
+              <path d="M 46 63 Q 50 67 54 63" stroke="#1e1b4b" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <circle cx="34" cy="57" r="4" fill="#f43f5e" opacity="0.4"/>
+              <circle cx="66" cy="57" r="4" fill="#f43f5e" opacity="0.4"/>
+            </svg>
+          </div>
+          <p class="text-xs sm:text-sm font-medium text-pink-800 text-left">
+            "Counting down the last seconds before your special day officially begins!"
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 2: BIRTHDAY YEAR PASSCODE GATE ================= -->
+    <section id="stage2" class="w-full max-w-md hidden transition-all duration-700 transform flex flex-col items-center">
+      <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-2xl text-center border-2 border-purple-200/80 w-full relative">
+        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3 text-purple-600 shadow-md">
+          <i data-lucide="lock-keyhole" class="w-8 h-8"></i>
+        </div>
+
+        <h2 class="text-2xl font-bold text-slate-800 mb-1">Secret Access Gate 🔐</h2>
+        <p class="text-xs sm:text-sm text-slate-500 mb-5">Enter your birth year to unlock your personal surprise box</p>
+
+        <!-- Passcode Display & Input -->
+        <div class="mb-5">
+          <div class="flex justify-center items-center gap-3 mb-2">
+            <input type="text" id="passcodeInput" maxlength="4" placeholder="YYYY" 
+                   class="w-48 text-center text-3xl font-mono tracking-widest font-bold py-2.5 px-4 rounded-2xl border-2 border-purple-300 focus:border-pink-500 focus:outline-none bg-white shadow-inner text-purple-700 placeholder:text-slate-300"
+                   onkeydown="if(event.key==='Enter') verifyPasscode()">
+          </div>
+          <div id="passcodeError" class="text-xs font-semibold text-rose-500 h-4 transition-all"></div>
+          <div class="text-[11px] text-slate-400 mt-1">Hint: Defaults to accepted year <span class="font-bold text-purple-600 cursor-pointer underline" onclick="fillHintYear()">2000</span> (or type any valid 4-digit year)</div>
+        </div>
+
+        <!-- Quick Numpad for mobile friendly touch -->
+        <div class="grid grid-cols-3 gap-2 max-w-xs mx-auto mb-5">
+          <button onclick="pressKey('1')" class="py-2.5 bg-white hover:bg-purple-50 text-slate-700 font-bold rounded-xl border border-purple-100 shadow-sm active:scale-95 transition">1</button>
+          <button onclick="pressKey('2')" class="py-2.5 bg-white hover:bg-purple-50 text-slate-700 font-bold rounded-xl border border-purple-100 shadow-sm active:scale-95 transition">2</button>
+          <button onclick="pressKey('3')" class="py-2.5 bg-white hover:bg-purple-50 text-slate-700 font-bold rounded-xl border border-purple-100 shadow-sm active:scale-95 transition">3</button>
+          <button onclick="pressKey('4')" class="py-2.5 bg-white hover:bg-purple-50 text-slate-700 font-bold rounded-xl border border-purple-100 shadow-sm active:scale-95 transition">4</button>
+          <button onclick="pressKey('5')" class="py-2.5 bg-white hover:bg-purple-50 text-slate-700 font-bold rounded-xl border border-purple-100 shadow-sm active:scale-95 transition">5</button>
+          <button onclick="pressKey('6')" class="py-2.5 bg-white hover:bg-purple-50 text-slate-700 font-bold rounded-xl border border-purple-100 shadow-sm active:scale-95 transition">6</button>
+          <button onclick="pressKey('7')" class="py-2.5 bg-white hover:bg-purple-50 text-slate-700 font-bold rounded-xl border border-purple-100 shadow-sm active:scale-95 transition">7</button>
+          <button onclick="pressKey('8')" class="py-2.5 bg-white hover:bg-purple-50 text-slate-700 font-bold rounded-xl border border-purple-100 shadow-sm active:scale-95 transition">8</button>
+          <button onclick="pressKey('9')" class="py-2.5 bg-white hover:bg-purple-50 text-slate-700 font-bold rounded-xl border border-purple-100 shadow-sm active:scale-95 transition">9</button>
+          <button onclick="clearPasscode()" class="py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold rounded-xl border border-rose-100 text-xs active:scale-95 transition">CLR</button>
+          <button onclick="pressKey('0')" class="py-2.5 bg-white hover:bg-purple-50 text-slate-700 font-bold rounded-xl border border-purple-100 shadow-sm active:scale-95 transition">0</button>
+          <button onclick="backspaceKey()" class="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl border border-slate-200 text-sm active:scale-95 transition">⌫</button>
+        </div>
+
+        <button onclick="verifyPasscode()" class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-2xl shadow-lg hover:shadow-pink-300/50 transition duration-200 active:scale-98 flex items-center justify-center gap-2">
+          <span>Open Mystery Gift</span>
+          <i data-lucide="sparkles" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 3: TEASER SCREEN ("I Made Something For You") ================= -->
+    <section id="stage3" class="w-full max-w-lg hidden transition-all duration-700 transform flex flex-col items-center">
+      <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-2xl text-center border-2 border-pink-300/80 w-full flex flex-col items-center relative">
+        
+        <!-- Top playful banner -->
+        <span class="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-rose-100 text-rose-600 text-xs font-semibold uppercase tracking-wider mb-2">
+          Surprise Incoming 💌
+        </span>
+
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 via-purple-600 to-rose-500 font-cursive leading-tight mb-2 py-1">
+          I Made Something For You
+        </h1>
+        <p class="text-slate-600 text-sm max-w-xs mb-4">
+          Put all my heart into crafting this special experience. Are you curious to see what's waiting?
+        </p>
+
+        <!-- Cute Cartoon Character (SVG Cat with heart & bouncing paws) -->
+        <div class="w-48 h-48 sm:w-56 sm:h-56 my-2 relative animate-float">
+          <svg viewBox="0 0 200 200" class="w-full h-full filter drop-shadow-md">
+            <!-- Tail -->
+            <path d="M 40 145 C 10 130 10 90 35 95 C 45 98 40 115 50 135" fill="none" stroke="#fed7aa" stroke-width="12" stroke-linecap="round"/>
+            <!-- Body -->
+            <ellipse cx="100" cy="140" rx="48" ry="40" fill="#ffedd5"/>
+            <!-- Belly patch -->
+            <ellipse cx="100" cy="144" rx="30" ry="24" fill="#fff7ed"/>
+            <!-- Head -->
+            <circle cx="100" cy="85" r="42" fill="#ffedd5"/>
+            <!-- Ears -->
+            <polygon points="68,60 62,25 90,48" fill="#fed7aa"/>
+            <polygon points="70,56 66,35 84,48" fill="#fda4af"/>
+            <polygon points="132,60 138,25 110,48" fill="#fed7aa"/>
+            <polygon points="130,56 134,35 116,48" fill="#fda4af"/>
+            <!-- Big Cute Eyes -->
+            <ellipse cx="85" cy="82" rx="7" ry="9" fill="#1e1b4b"/>
+            <circle cx="83" cy="79" r="3" fill="#ffffff"/>
+            <circle cx="87" cy="85" r="1.5" fill="#ffffff"/>
+
+            <ellipse cx="115" cy="82" rx="7" ry="9" fill="#1e1b4b"/>
+            <circle cx="113" cy="79" r="3" fill="#ffffff"/>
+            <circle cx="117" cy="85" r="1.5" fill="#ffffff"/>
+
+            <!-- Blush Cheeks -->
+            <ellipse cx="74" cy="94" rx="8" ry="4" fill="#fb7185" opacity="0.6"/>
+            <ellipse cx="126" cy="94" rx="8" ry="4" fill="#fb7185" opacity="0.6"/>
+
+            <!-- Nose & Mouth -->
+            <polygon points="100,91 97,87 103,87" fill="#f43f5e"/>
+            <path d="M 95 93 Q 100 97 100 93 Q 100 97 105 93" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round"/>
+
+            <!-- Whiskers -->
+            <line x1="60" y1="88" x2="42" y2="85" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/>
+            <line x1="60" y1="94" x2="40" y2="95" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/>
+            <line x1="140" y1="88" x2="158" y2="85" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/>
+            <line x1="140" y1="94" x2="160" y2="95" stroke="#cbd5e1" stroke-width="2" stroke-linecap="round"/>
+
+            <!-- Paws holding a heart -->
+            <ellipse cx="85" cy="130" rx="10" ry="8" fill="#fed7aa"/>
+            <ellipse cx="115" cy="130" rx="10" ry="8" fill="#fed7aa"/>
+            
+            <!-- Red Heart -->
+            <path d="M 100 125 C 100 120 90 110 80 120 C 70 130 90 145 100 155 C 110 145 130 130 120 120 C 110 110 100 120 100 125 Z" fill="#f43f5e">
+              <animateTransform attributeName="transform" type="scale" values="1; 1.08; 1" dur="1.2s" repeatCount="indefinite" transform-origin="100 135"/>
+            </path>
+          </svg>
+        </div>
+
+        <p class="text-xs text-purple-600 font-semibold mb-6 italic">Ready to open it up?</p>
+
+        <!-- Playful Dual YES Buttons: "Yes" and "Yes" -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-xs">
+          <button onclick="goToStage4('Left Yes')" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold shadow-md hover:shadow-pink-300/50 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2">
+            <span>Yes! 🎉</span>
+          </button>
+          <button onclick="goToStage4('Right Yes')" class="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-bold shadow-md hover:shadow-purple-300/50 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center justify-center gap-2">
+            <span>Also Yes! 🥰</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 4: THREE GIFT HAMPERS ================= -->
+    <section id="stage4" class="w-full max-w-3xl hidden transition-all duration-700 transform flex flex-col items-center">
+      <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-2xl text-center border-2 border-pink-200/80 w-full relative">
+
+        <span class="inline-flex items-center gap-1.5 px-4 py-1 rounded-full bg-pink-100 text-pink-700 text-xs font-semibold uppercase tracking-wider mb-3">
+          Surprise Hampers 🎁
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800 mb-1">Select A Mystery Hamper</h2>
+        <p class="text-slate-500 text-xs sm:text-sm mb-8">Each box holds a distinct surprise piece prepared specially for your birthday.</p>
+
+        <!-- 3 Gift Hampers Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-6 mb-8">
+          
+          <!-- Box 1: Hanging Memory Photos -->
+          <div onclick="openHamper(1)" class="group cursor-pointer bg-gradient-to-b from-white to-pink-50/70 p-6 rounded-3xl border-2 border-pink-200 hover:border-pink-400 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 active:scale-95 relative flex flex-col items-center">
+            <span class="absolute -top-3 px-3 py-0.5 rounded-full bg-pink-500 text-white text-[11px] font-bold shadow">Box #1</span>
+            
+            <div class="w-24 h-24 mb-3 transition-transform group-hover:scale-110 duration-300">
+              <!-- Gift Hamper SVG Box 1 -->
+              <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md">
+                <rect x="20" y="45" width="60" height="45" rx="8" fill="#f43f5e"/>
+                <rect x="15" y="35" width="70" height="15" rx="5" fill="#fb7185"/>
+                <!-- Ribbon vertical -->
+                <rect x="44" y="35" width="12" height="55" fill="#fef08a"/>
+                <!-- Ribbon Bow -->
+                <path d="M 50 35 C 38 22 25 32 44 35 Z" fill="#fef08a"/>
+                <path d="M 50 35 C 62 22 75 32 56 35 Z" fill="#fef08a"/>
+                <circle cx="50" cy="35" r="5" fill="#fde047"/>
+              </svg>
+            </div>
+
+            <h3 class="font-bold text-slate-800 text-base mb-1">Memory Ribbon</h3>
+            <p class="text-xs text-slate-500 leading-snug">Hanging Polaroids & Sweet Memories</p>
+            <div class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-pink-600 group-hover:underline">
+              <span>Open Box</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </div>
+          </div>
+
+          <!-- Box 2: Emotional Birthday Wish Letter -->
+          <div onclick="openHamper(2)" class="group cursor-pointer bg-gradient-to-b from-white to-purple-50/70 p-6 rounded-3xl border-2 border-purple-200 hover:border-purple-400 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 active:scale-95 relative flex flex-col items-center">
+            <span class="absolute -top-3 px-3 py-0.5 rounded-full bg-purple-600 text-white text-[11px] font-bold shadow">Box #2</span>
+            
+            <div class="w-24 h-24 mb-3 transition-transform group-hover:scale-110 duration-300">
+              <!-- Gift Hamper SVG Box 2 -->
+              <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md">
+                <rect x="20" y="45" width="60" height="45" rx="8" fill="#8b5cf6"/>
+                <rect x="15" y="35" width="70" height="15" rx="5" fill="#a78bfa"/>
+                <!-- Ribbon vertical -->
+                <rect x="44" y="35" width="12" height="55" fill="#fed7aa"/>
+                <!-- Ribbon Bow -->
+                <path d="M 50 35 C 38 22 25 32 44 35 Z" fill="#fed7aa"/>
+                <path d="M 50 35 C 62 22 75 32 56 35 Z" fill="#fed7aa"/>
+                <circle cx="50" cy="35" r="5" fill="#fdba74"/>
+              </svg>
+            </div>
+
+            <h3 class="font-bold text-slate-800 text-base mb-1">Favorite Person</h3>
+            <p class="text-xs text-slate-500 leading-snug">Heartfelt Letter & Personal Tribute</p>
+            <div class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-purple-600 group-hover:underline">
+              <span>Open Box</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </div>
+          </div>
+
+          <!-- Box 3: Cake & Candle Blow -->
+          <div onclick="openHamper(3)" class="group cursor-pointer bg-gradient-to-b from-white to-amber-50/70 p-6 rounded-3xl border-2 border-amber-200 hover:border-amber-400 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 active:scale-95 relative flex flex-col items-center">
+            <span class="absolute -top-3 px-3 py-0.5 rounded-full bg-amber-500 text-white text-[11px] font-bold shadow">Box #3</span>
+            
+            <div class="w-24 h-24 mb-3 transition-transform group-hover:scale-110 duration-300">
+              <!-- Gift Hamper SVG Box 3 -->
+              <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-md">
+                <rect x="20" y="45" width="60" height="45" rx="8" fill="#f59e0b"/>
+                <rect x="15" y="35" width="70" height="15" rx="5" fill="#fbbf24"/>
+                <!-- Ribbon vertical -->
+                <rect x="44" y="35" width="12" height="55" fill="#f43f5e"/>
+                <!-- Ribbon Bow -->
+                <path d="M 50 35 C 38 22 25 32 44 35 Z" fill="#f43f5e"/>
+                <path d="M 50 35 C 62 22 75 32 56 35 Z" fill="#f43f5e"/>
+                <circle cx="50" cy="35" r="5" fill="#e11d48"/>
+              </svg>
+            </div>
+
+            <h3 class="font-bold text-slate-800 text-base mb-1">Birthday Cake</h3>
+            <p class="text-xs text-slate-500 leading-snug">Make a Wish & Blow the Candle</p>
+            <div class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-amber-600 group-hover:underline">
+              <span>Open Box</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Bottom cute cartoon prompt -->
+        <div class="flex items-center justify-center gap-3 bg-white/70 p-3.5 rounded-2xl border border-pink-200 max-w-md mx-auto shadow-sm">
+          <div class="w-12 h-12 flex-shrink-0 animate-bounce">
+            <!-- Cute Bunny SVG -->
+            <svg viewBox="0 0 100 100" class="w-full h-full">
+              <!-- Ears -->
+              <ellipse cx="40" cy="28" rx="8" ry="24" fill="#f1f5f9"/>
+              <ellipse cx="40" cy="28" rx="4" ry="16" fill="#f472b6"/>
+              <ellipse cx="60" cy="28" rx="8" ry="24" fill="#f1f5f9"/>
+              <ellipse cx="60" cy="28" rx="4" ry="16" fill="#f472b6"/>
+              <!-- Head -->
+              <circle cx="50" cy="62" r="30" fill="#f8fafc"/>
+              <circle cx="42" cy="58" r="3.5" fill="#1e293b"/>
+              <circle cx="58" cy="58" r="3.5" fill="#1e293b"/>
+              <circle cx="40" cy="56" r="1" fill="#ffffff"/>
+              <circle cx="56" cy="56" r="1" fill="#ffffff"/>
+              <!-- Cheeks -->
+              <ellipse cx="36" cy="66" rx="4" ry="2.5" fill="#f43f5e" opacity="0.4"/>
+              <ellipse cx="64" cy="66" rx="4" ry="2.5" fill="#f43f5e" opacity="0.4"/>
+              <!-- Nose -->
+              <polygon points="50,65 48,62 52,62" fill="#f43f5e"/>
+              <path d="M 46 66 Q 50 70 54 66" stroke="#475569" stroke-width="1.5" fill="none"/>
+            </svg>
+          </div>
+          <p class="text-xs sm:text-sm font-semibold text-slate-700 text-left">
+            "Tap on any Mystery Box above to unlock your birthday gift! You can explore all three!"
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= STAGE 5: MODALS FOR EACH HAMPER ================= -->
+
+  <!-- MODAL 1: HANGING POLAROID PHOTO GALLERY -->
+  <div id="modalHamper1" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="glass-card rounded-3xl max-w-4xl w-full p-4 sm:p-8 shadow-2xl border border-pink-200 relative my-auto max-h-[92vh] flex flex-col">
+      <!-- Close button -->
+      <button onclick="closeModal('modalHamper1')" class="absolute top-4 right-4 bg-white/80 hover:bg-white text-slate-600 rounded-full p-2 shadow-sm border border-slate-200 active:scale-90 transition z-20">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="text-center mb-4">
+        <span class="inline-block px-3 py-0.5 rounded-full bg-pink-100 text-pink-600 text-xs font-bold uppercase tracking-wider mb-1">Hamper #1</span>
+        <h2 class="text-2xl sm:text-3xl font-cursive text-pink-600">Strings of Golden Memories</h2>
+        <p class="text-xs sm:text-sm text-slate-500">Every snapshot is a memory wrapped in smiles and love</p>
+      </div>
+
+      <!-- Hanging Fairy Lights String Container -->
+      <div class="relative overflow-x-auto pb-6 pt-6 px-4 bg-gradient-to-r from-amber-50/50 via-rose-50/40 to-indigo-50/50 rounded-2xl border border-amber-200/60 shadow-inner flex-grow">
+        
+        <!-- Fairy Light Wire & glowing bulbs -->
+        <div class="relative w-full h-8 flex items-center justify-around mb-2">
+          <div class="absolute inset-x-0 top-1/2 h-0.5 bg-amber-400/80 shadow-[0_0_8px_rgba(251,191,36,0.8)]"></div>
+          <span class="w-3 h-3 rounded-full bg-yellow-300 shadow-[0_0_10px_#fde047] animate-pulse"></span>
+          <span class="w-3 h-3 rounded-full bg-pink-300 shadow-[0_0_10px_#f472b6] animate-pulse" style="animation-delay: 0.3s;"></span>
+          <span class="w-3 h-3 rounded-full bg-amber-200 shadow-[0_0_10px_#fef08a] animate-pulse" style="animation-delay: 0.6s;"></span>
+          <span class="w-3 h-3 rounded-full bg-cyan-200 shadow-[0_0_10px_#a5f3fc] animate-pulse" style="animation-delay: 0.9s;"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-300 shadow-[0_0_10px_#fde047] animate-pulse" style="animation-delay: 0.4s;"></span>
+          <span class="w-3 h-3 rounded-full bg-pink-300 shadow-[0_0_10px_#f472b6] animate-pulse" style="animation-delay: 0.7s;"></span>
+          <span class="w-3 h-3 rounded-full bg-rose-300 shadow-[0_0_10px_#fda4af] animate-pulse" style="animation-delay: 0.2s;"></span>
+        </div>
+
+        <!-- Hanging Photos Grid (Polaroids of all 7 uploaded photos) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pt-2">
+
+          <!-- Photo 1: 20250809_121006.jpg -->
+          <div class="sway-slow-1 flex flex-col items-center">
+            <div class="w-4 h-6 bg-amber-800 rounded-sm -mb-3 z-10 shadow-sm border border-amber-900"></div>
+            <div class="bg-white p-3 pb-4 rounded-2xl shadow-lg border border-slate-200 w-full max-w-[220px] transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openLightbox('20250809_121006.jpg', 'Confidence & Grace', 'Marching forward with pure charm and an infectious smile.')">
+              <div class="w-full h-52 rounded-xl bg-pink-50 overflow-hidden relative shadow-inner">
+                <img src="20250809_121006.jpg" 
+                     alt="Walking in style" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/400x600/fecdd3/9f1239?text=Walking+In+Style';"
+                     class="w-full h-full object-cover object-top hover:scale-110 transition duration-500">
+              </div>
+              <p class="font-handwriting text-lg text-slate-800 text-center mt-3 font-bold">"Confidence & Swag"</p>
+              <p class="text-[11px] text-slate-400 text-center italic">Walking forward with that signature radiant energy</p>
+            </div>
+          </div>
+
+          <!-- Photo 2: 20250704_103112.jpg -->
+          <div class="sway-slow-2 flex flex-col items-center">
+            <div class="w-4 h-6 bg-amber-800 rounded-sm -mb-3 z-10 shadow-sm border border-amber-900"></div>
+            <div class="bg-white p-3 pb-4 rounded-2xl shadow-lg border border-slate-200 w-full max-w-[220px] transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openLightbox('20250704_103112.jpg', 'Heartfelt Smile', 'A presence as refreshing and comforting as nature itself.')">
+              <div class="w-full h-52 rounded-xl bg-blue-50 overflow-hidden relative shadow-inner">
+                <img src="20250704_103112.jpg" 
+                     alt="Smiling by tree" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/400x600/dbeafe/1e40af?text=Sunny+Vibes';"
+                     class="w-full h-full object-cover object-top hover:scale-110 transition duration-500">
+              </div>
+              <p class="font-handwriting text-lg text-slate-800 text-center mt-3 font-bold">"Sunny Dispositions"</p>
+              <p class="text-[11px] text-slate-400 text-center italic">Your warm smile turns even cloudy days bright</p>
+            </div>
+          </div>
+
+          <!-- Photo 3: 20250525_200115.jpg -->
+          <div class="sway-slow-3 flex flex-col items-center">
+            <div class="w-4 h-6 bg-amber-800 rounded-sm -mb-3 z-10 shadow-sm border border-amber-900"></div>
+            <div class="bg-white p-3 pb-4 rounded-2xl shadow-lg border border-slate-200 w-full max-w-[220px] transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openLightbox('20250525_200115.jpg', 'Timeless Aura', 'Lost in thoughts of bright dreams and great tomorrows.')">
+              <div class="w-full h-52 rounded-xl bg-purple-50 overflow-hidden relative shadow-inner">
+                <img src="20250525_200115.jpg" 
+                     alt="Side profile aesthetic" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/400x600/e9d5ff/6b21a8?text=Pure+Elegance';"
+                     class="w-full h-full object-cover object-top hover:scale-110 transition duration-500">
+              </div>
+              <p class="font-handwriting text-lg text-slate-800 text-center mt-3 font-bold">"Deep Thoughts"</p>
+              <p class="text-[11px] text-slate-400 text-center italic">Calm mind, steady heart, and golden ambitions</p>
+            </div>
+          </div>
+
+          <!-- Photo 4: 20250703_103050.jpg -->
+          <div class="sway-slow-1 flex flex-col items-center">
+            <div class="w-4 h-6 bg-amber-800 rounded-sm -mb-3 z-10 shadow-sm border border-amber-900"></div>
+            <div class="bg-white p-3 pb-4 rounded-2xl shadow-lg border border-slate-200 w-full max-w-[220px] transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openLightbox('20250703_103050.jpg', 'Evergreen Positivity', 'Standing tall, grounded in strength and kind humility.')">
+              <div class="w-full h-52 rounded-xl bg-emerald-50 overflow-hidden relative shadow-inner">
+                <img src="20250703_103050.jpg" 
+                     alt="Standing with green leaves" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/400x600/d1fae5/065f46?text=Evergreen+Spirit';"
+                     class="w-full h-full object-cover object-top hover:scale-110 transition duration-500">
+              </div>
+              <p class="font-handwriting text-lg text-slate-800 text-center mt-3 font-bold">"Evergreen Spirit"</p>
+              <p class="text-[11px] text-slate-400 text-center italic">Grounded, humble, and always growing stronger</p>
+            </div>
+          </div>
+
+          <!-- Photo 5: 20250524_190515.jpg -->
+          <div class="sway-slow-2 flex flex-col items-center">
+            <div class="w-4 h-6 bg-amber-800 rounded-sm -mb-3 z-10 shadow-sm border border-amber-900"></div>
+            <div class="bg-white p-3 pb-4 rounded-2xl shadow-lg border border-slate-200 w-full max-w-[220px] transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openLightbox('20250524_190515.jpg', 'Relaxed & Unapologetic', 'Comfortable in your own skin, taking life at its finest pace.')">
+              <div class="w-full h-52 rounded-xl bg-rose-50 overflow-hidden relative shadow-inner">
+                <img src="20250524_190515.jpg" 
+                     alt="Relaxed on armchair" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/400x600/fee2e2/991b1b?text=Chill+Moments';"
+                     class="w-full h-full object-cover object-top hover:scale-110 transition duration-500">
+              </div>
+              <p class="font-handwriting text-lg text-slate-800 text-center mt-3 font-bold">"Chill & Unwind"</p>
+              <p class="text-[11px] text-slate-400 text-center italic">Because you deserve all the comfort in this world</p>
+            </div>
+          </div>
+
+          <!-- Photo 6: 20250511_195813.jpg -->
+          <div class="sway-slow-3 flex flex-col items-center">
+            <div class="w-4 h-6 bg-amber-800 rounded-sm -mb-3 z-10 shadow-sm border border-amber-900"></div>
+            <div class="bg-white p-3 pb-4 rounded-2xl shadow-lg border border-slate-200 w-full max-w-[220px] transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openLightbox('20250511_195813.jpg', 'Every Second Matters', 'Your time has come to shine brighter than ever before.')">
+              <div class="w-full h-52 rounded-xl bg-teal-50 overflow-hidden relative shadow-inner">
+                <img src="20250511_195813.jpg" 
+                     alt="Shades checking watch" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/400x600/ccfbf1/115e59?text=Timeless+Style';"
+                     class="w-full h-full object-cover object-top hover:scale-110 transition duration-500">
+              </div>
+              <p class="font-handwriting text-lg text-slate-800 text-center mt-3 font-bold">"Time To Flourish"</p>
+              <p class="text-[11px] text-slate-400 text-center italic">The clock is ticking toward your greatest achievements</p>
+            </div>
+          </div>
+
+          <!-- Photo 7: 20250511_195804.jpg -->
+          <div class="sway-slow-1 flex flex-col items-center">
+            <div class="w-4 h-6 bg-amber-800 rounded-sm -mb-3 z-10 shadow-sm border border-amber-900"></div>
+            <div class="bg-white p-3 pb-4 rounded-2xl shadow-lg border border-slate-200 w-full max-w-[220px] transform hover:scale-105 transition duration-300 cursor-pointer" onclick="openLightbox('20250511_195804.jpg', 'Charismatic Soul', 'The world is much richer with your genuine vibe.')">
+              <div class="w-full h-52 rounded-xl bg-amber-50 overflow-hidden relative shadow-inner">
+                <img src="20250511_195804.jpg" 
+                     alt="Front stylish pose in green shirt" 
+                     onerror="this.onerror=null; this.src='https://placehold.co/400x600/fef3c7/92400e?text=Dashing+Vibe';"
+                     class="w-full h-full object-cover object-top hover:scale-110 transition duration-500">
+              </div>
+              <p class="font-handwriting text-lg text-slate-800 text-center mt-3 font-bold">"Dashing Star"</p>
+              <p class="text-[11px] text-slate-400 text-center italic">Stealing hearts with effortless class and charm</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mt-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+        <p class="text-xs text-slate-500 italic">💡 Tap any photo to enlarge it and read the thought!</p>
+        <button onclick="closeModal('modalHamper1')" class="bg-pink-500 hover:bg-pink-600 text-white font-semibold text-xs py-2 px-6 rounded-full shadow transition">
+          Done Viewing
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: HEARTFELT LETTER & PORTRAIT ("Happy Birthday My Favorite PERSON") -->
+  <div id="modalHamper2" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="glass-card rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-purple-200 relative my-auto max-h-[92vh] flex flex-col">
+      <!-- Close button -->
+      <button onclick="closeModal('modalHamper2')" class="absolute top-4 right-4 bg-white/80 hover:bg-white text-slate-600 rounded-full p-2 shadow-sm border border-slate-200 active:scale-90 transition z-20">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="text-center mb-3">
+        <span class="inline-block px-3 py-0.5 rounded-full bg-purple-100 text-purple-700 text-xs font-bold uppercase tracking-wider mb-1">Hamper #2</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 font-cursive">
+          Happy Birthday My Favorite PERSON!
+        </h2>
+      </div>
+
+      <div class="overflow-y-auto pr-2 space-y-4 text-slate-700">
+        <!-- Featured Portrait using 20250525_200115.jpg -->
+        <div class="relative w-40 h-40 sm:w-48 sm:h-48 mx-auto rounded-full p-1.5 bg-gradient-to-tr from-pink-400 via-purple-500 to-indigo-500 shadow-2xl group">
+          <img src="20250525_200115.jpg" 
+               alt="My Favorite Person" 
+               onerror="this.onerror=null; this.src='https://placehold.co/500x500/f3e8ff/6b21a8?text=My+Favorite+Person';"
+               class="w-full h-full object-cover object-top rounded-full shadow-inner transform group-hover:scale-105 transition duration-500">
+          <div class="absolute bottom-1 right-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-full p-2 shadow-lg animate-bounce">
+            <i data-lucide="heart" class="w-5 h-5 fill-white"></i>
+          </div>
+        </div>
+
+        <!-- Long Warm Thought / Birthday Wishing Letter -->
+        <div class="bg-gradient-to-br from-purple-50/80 to-pink-50/80 p-5 sm:p-6 rounded-2xl border border-purple-200/70 text-sm sm:text-base leading-relaxed space-y-3 font-normal text-slate-700 shadow-inner">
+          <p>
+            <span class="font-bold text-purple-800 text-base sm:text-lg">To the one who makes everything better,</span>
+          </p>
+          <p>
+            Words will never be enough to say how truly lucky I am to have you in my corner. In a world full of noise, your presence is that genuine, calming sanctuary where I can always be myself. You light up every room you walk into with your effortless charm, caring heart, and infectious warmth.
+          </p>
+          <p>
+            Looking at every memory we make—from the spontaneous talks to the laughter we share—I realize how rare and precious you are. You inspire those around you just by being genuine, humble, and fiercely loyal.
+          </p>
+          <p>
+            On this special birthday, my deepest wish is for life to repay your kindness ten times over: may success follow every single step you take, may every ambition you carry in your heart come true, and may you forever be surrounded by peace, good health, and true joy.
+          </p>
+          <p class="font-handwriting text-xl sm:text-2xl text-pink-700 text-right pt-2 font-bold">
+            Always rooting for you & celebrating you, ❤️
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-4 flex justify-end">
+        <button onclick="closeModal('modalHamper2')" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs py-2.5 px-6 rounded-full shadow transition">
+          Keep In Heart ✨
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX MODAL FOR INDIVIDUAL PHOTO EXPANSION -->
+  <div id="lightboxModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+    <button onclick="closeLightbox()" class="absolute top-5 right-5 bg-white/20 hover:bg-white text-white hover:text-slate-900 rounded-full p-2.5 transition active:scale-90 z-20">
+      <i data-lucide="x" class="w-6 h-6"></i>
+    </button>
+    <div class="max-w-md w-full bg-white rounded-3xl p-4 shadow-2xl overflow-hidden flex flex-col items-center animate-float">
+      <div class="w-full max-h-[65vh] rounded-2xl overflow-hidden bg-slate-100 mb-3 shadow-inner">
+        <img id="lightboxImage" src="" alt="Enlarged Memory" class="w-full h-full object-contain max-h-[65vh]">
+      </div>
+      <h3 id="lightboxTitle" class="font-bold text-slate-800 text-lg"></h3>
+      <p id="lightboxCaption" class="text-xs text-slate-500 text-center mt-1 px-2"></p>
+    </div>
+  </div>
+
+  <!-- MODAL 2: HEARTFELT LETTER & PORTRAIT ("Happy Birthday My Favorite PERSON") -->
+  <div id="modalHamper2" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="glass-card rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-purple-200 relative my-auto max-h-[92vh] flex flex-col">
+      <!-- Close button -->
+      <button onclick="closeModal('modalHamper2')" class="absolute top-4 right-4 bg-white/80 hover:bg-white text-slate-600 rounded-full p-2 shadow-sm border border-slate-200 active:scale-90 transition z-20">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="text-center mb-4">
+        <span class="inline-block px-3 py-0.5 rounded-full bg-purple-100 text-purple-700 text-xs font-bold uppercase tracking-wider mb-1">Hamper #2</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 font-cursive">
+          Happy Birthday My Favorite PERSON!
+        </h2>
+      </div>
+
+      <div class="overflow-y-auto pr-2 space-y-4 text-slate-700">
+        <!-- Featured Portrait -->
+        <div class="relative w-36 h-36 sm:w-44 sm:h-44 mx-auto rounded-full p-1.5 bg-gradient-to-tr from-pink-400 via-purple-400 to-indigo-400 shadow-xl">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80" 
+               alt="Favorite Person" 
+               onerror="this.src='https://placehold.co/400x400/f3e8ff/6b21a8?text=My+Favorite+Person'"
+               class="w-full h-full object-cover rounded-full">
+          <div class="absolute bottom-1 right-2 bg-pink-500 text-white rounded-full p-1.5 shadow-md">
+            <i data-lucide="heart" class="w-4 h-4 fill-white"></i>
+          </div>
+        </div>
+
+        <!-- Long Warm Thought / Birthday Wishing Letter -->
+        <div class="bg-gradient-to-br from-purple-50/70 to-pink-50/70 p-5 rounded-2xl border border-purple-100 text-sm sm:text-base leading-relaxed space-y-3 font-normal text-slate-700 shadow-inner">
+          <p>
+            <span class="font-bold text-purple-800">Dearest,</span> words often fall short when I try to describe how incredibly grateful I am to have you in my life.
+          </p>
+          <p>
+            You possess that rare, comforting energy that turns regular days into treasured memories and difficult moments into lighthearted laughter. Your kindness, your sharp wit, and your genuine heart inspire everyone fortunate enough to walk alongside you.
+          </p>
+          <p>
+            On this day when the universe welcomed you, I wish for your path to be showered with boundless opportunities, sincere companionship, peace that warms your soul, and happiness that never runs dry. 
+          </p>
+          <p class="font-handwriting text-xl sm:text-2xl text-pink-700 text-right pt-2 font-bold">
+            With all my love & warmest wishes always, ❤️
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-4 flex justify-end">
+        <button onclick="closeModal('modalHamper2')" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold text-xs py-2.5 px-6 rounded-full shadow transition">
+          Keep In Heart
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: INTERACTIVE BIRTHDAY CAKE & CANDLE BLOW -->
+  <div id="modalHamper3" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="glass-card rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-amber-200 relative my-auto max-h-[92vh] flex flex-col items-center text-center">
+      <!-- Close button -->
+      <button onclick="closeModal('modalHamper3')" class="absolute top-4 right-4 bg-white/80 hover:bg-white text-slate-600 rounded-full p-2 shadow-sm border border-slate-200 active:scale-90 transition z-20">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <span class="inline-block px-3 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase tracking-wider mb-2">Hamper #3</span>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800 font-cursive text-amber-600 mb-1">Make a Wish & Blow!</h2>
+      <p id="candleInstructionText" class="text-xs sm:text-sm text-slate-500 mb-4">Close your eyes, make your deepest wish, then blow the candles!</p>
+
+      <!-- Interactive 3D Layered Cake Container -->
+      <div class="w-64 h-56 relative flex flex-col items-center justify-end my-2">
+        
+        <!-- Candle Group -->
+        <div class="flex items-end justify-center gap-6 mb-[-6px] z-20">
+          
+          <!-- Candle 1 -->
+          <div class="flex flex-col items-center cursor-pointer" onclick="blowCandles()">
+            <div id="flame1" class="w-3.5 h-6 bg-gradient-to-t from-amber-500 via-yellow-300 to-white rounded-full flame-flicker shadow-[0_0_12px_#f59e0b]"></div>
+            <div id="smoke1" class="w-3 h-3 rounded-full bg-slate-300 hidden"></div>
+            <div class="w-1.5 h-2 bg-slate-800"></div>
+            <div class="w-3 h-10 bg-gradient-to-r from-pink-400 to-rose-300 rounded-sm border border-pink-400"></div>
+          </div>
+
+          <!-- Center Main Candle -->
+          <div class="flex flex-col items-center cursor-pointer" onclick="blowCandles()">
+            <div id="flame2" class="w-4 h-7 bg-gradient-to-t from-amber-500 via-yellow-200 to-white rounded-full flame-flicker shadow-[0_0_15px_#f59e0b]"></div>
+            <div id="smoke2" class="w-3 h-3 rounded-full bg-slate-300 hidden"></div>
+            <div class="w-1.5 h-2 bg-slate-800"></div>
+            <div class="w-3.5 h-12 bg-gradient-to-r from-purple-400 to-indigo-300 rounded-sm border border-purple-400"></div>
+          </div>
+
+          <!-- Candle 3 -->
+          <div class="flex flex-col items-center cursor-pointer" onclick="blowCandles()">
+            <div id="flame3" class="w-3.5 h-6 bg-gradient-to-t from-amber-500 via-yellow-300 to-white rounded-full flame-flicker shadow-[0_0_12px_#f59e0b]"></div>
+            <div id="smoke3" class="w-3 h-3 rounded-full bg-slate-300 hidden"></div>
+            <div class="w-1.5 h-2 bg-slate-800"></div>
+            <div class="w-3 h-10 bg-gradient-to-r from-cyan-400 to-teal-300 rounded-sm border border-cyan-400"></div>
+          </div>
+
+        </div>
+
+        <!-- Cake Top Layer -->
+        <div class="w-36 h-12 bg-gradient-to-r from-pink-200 via-rose-100 to-pink-200 rounded-2xl relative shadow-md border-b-4 border-pink-300 z-10 flex items-center justify-around px-2">
+          <!-- Frosting drips -->
+          <div class="absolute -bottom-2 left-3 w-4 h-4 bg-white rounded-full"></div>
+          <div class="absolute -bottom-2 left-10 w-5 h-4 bg-white rounded-full"></div>
+          <div class="absolute -bottom-2 right-4 w-4 h-4 bg-white rounded-full"></div>
+          <div class="absolute -bottom-1 right-12 w-3 h-3 bg-white rounded-full"></div>
+          <!-- Cherries/Sprinkles -->
+          <span class="w-3 h-3 rounded-full bg-rose-500 shadow-sm"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+          <span class="w-3 h-3 rounded-full bg-purple-500 shadow-sm"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-pink-400"></span>
+        </div>
+
+        <!-- Cake Bottom Layer -->
+        <div class="w-52 h-16 bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-200 rounded-2xl relative shadow-lg border-b-4 border-amber-300 flex items-center justify-around px-4">
+          <!-- Cream rosettes -->
+          <div class="w-4 h-4 rounded-full bg-white shadow-inner"></div>
+          <div class="w-4 h-4 rounded-full bg-pink-200 shadow-inner"></div>
+          <div class="w-4 h-4 rounded-full bg-white shadow-inner"></div>
+          <div class="w-4 h-4 rounded-full bg-pink-200 shadow-inner"></div>
+          <div class="w-4 h-4 rounded-full bg-white shadow-inner"></div>
+        </div>
+
+        <!-- Cake Stand / Plate -->
+        <div class="w-60 h-4 bg-slate-200 rounded-full shadow-md border border-slate-300"></div>
+        <div class="w-20 h-3 bg-slate-300 rounded-b-md shadow-inner"></div>
+      </div>
+
+      <!-- Action Button or Revealed Blessing Message -->
+      <div id="blowActionArea" class="w-full mt-4">
+        <button id="blowCandleBtn" onclick="blowCandles()" class="bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-600 hover:to-rose-600 text-white font-bold py-3 px-8 rounded-2xl shadow-lg transition transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 mx-auto">
+          <span>Blow The Candle 💨</span>
+        </button>
+      </div>
+
+      <!-- Revealed Sacred Birthday Blessing Message -->
+      <div id="revealedBlessing" class="hidden w-full mt-4 bg-gradient-to-r from-amber-50 via-rose-50 to-purple-50 p-6 rounded-2xl border-2 border-amber-300/80 shadow-md transform transition-all duration-700 animate-bounce" style="animation-duration: 2.5s;">
+        <div class="text-2xl mb-1">✨🙏✨</div>
+        <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-2 font-cursive text-amber-700">
+          "God bless you and complete your wish as soon as possible and be happy!"
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-600">
+          May the universe align every path toward your triumphs and shower you with perpetual smiles!
+        </p>
+        <button onclick="relightCandles()" class="mt-4 text-xs font-semibold text-purple-600 hover:underline">
+          Light candle again 🕯️
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom Global Footer Note -->
+  <footer class="relative z-10 text-center py-3 text-xs text-slate-500">
+    Made with love for an unforgettable birthday celebration ❤️
+  </footer>
+
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
+  <script>
+    // System & Audio state
+    let isMuted = false;
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+          audioCtx = new AudioContext();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    // Gentle synthesizer tone generator for sounds without external audio assets
+    function playTone(freq, type = 'sine', duration = 0.2, gainValue = 0.1) {
+      if (isMuted) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(gainValue, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {
+        console.warn('Audio note error:', e);
+      }
+    }
+
+    // Play chime fan-fare
+    function playCelebrationFanfare() {
+      if (isMuted) return;
+      const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+      notes.forEach((freq, idx) => {
+        setTimeout(() => {
+          playTone(freq, 'triangle', 0.5, 0.15);
+        }, idx * 120);
+      });
+    }
+
+    function playTick() {
+      playTone(800, 'square', 0.05, 0.03);
+    }
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      const statusText = document.getElementById('soundStatusText');
+      const btn = document.getElementById('soundToggleBtn');
+      if (isMuted) {
+        statusText.innerText = 'Sound Muted';
+        btn.classList.add('text-slate-400');
+      } else {
+        statusText.innerText = 'Sound On';
+        btn.classList.remove('text-slate-400');
+        playTone(600, 'sine', 0.15, 0.1);
+      }
+    }
+
+    // Confetti helper
+    function launchConfetti(duration = 2000) {
+      if (typeof confetti !== 'function') return;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+      const interval = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+        const particleCount = 45 * (timeLeft / duration);
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.4), y: Math.random() - 0.2 } }));
+        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.6, 0.9), y: Math.random() - 0.2 } }));
+      }, 250);
+    }
+
+    function randomInRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    /* -------------------------------------------------------------
+       STAGE 1: COUNTDOWN TIMER (11:59:50 -> 12:00:00)
+       ------------------------------------------------------------- */
+    let currentSeconds = 50;
+    const maxSeconds = 60;
+    const clockDisplay = document.getElementById('clockDisplay');
+    const timerProgress = document.getElementById('timerProgress');
+
+    function startStage1Timer() {
+      const countdownInterval = setInterval(() => {
+        currentSeconds++;
+        const pct = ((currentSeconds - 50) / 10) * 100;
+        timerProgress.style.width = pct + '%';
+        playTick();
+
+        if (currentSeconds < 60) {
+          clockDisplay.innerText = `11:59:${currentSeconds < 10 ? '0' + currentSeconds : currentSeconds}`;
+        } else {
+          // Reached 12:00:00!
+          clockDisplay.innerText = `12:00:00`;
+          clearInterval(countdownInterval);
+          playCelebrationFanfare();
+          launchConfetti(2800);
+
+          setTimeout(() => {
+            transitionToStage(1, 2);
+          }, 1600);
+        }
+      }, 1000);
+    }
+
+    /* -------------------------------------------------------------
+       STAGE TRANSITION HANDLER
+       ------------------------------------------------------------- */
+    function transitionToStage(fromStage, toStage) {
+      const currentEl = document.getElementById(`stage${fromStage}`);
+      const nextEl = document.getElementById(`stage${toStage}`);
+
+      if (currentEl) {
+        currentEl.classList.add('opacity-0', 'scale-95');
+        setTimeout(() => {
+          currentEl.classList.add('hidden');
+          if (nextEl) {
+            nextEl.classList.remove('hidden');
+            nextEl.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+              nextEl.classList.remove('opacity-0', 'scale-95');
+            }, 50);
+          }
+        }, 500);
+      }
+    }
+
+    /* -------------------------------------------------------------
+       STAGE 2: PASSCODE GATE (Birth Year)
+       ------------------------------------------------------------- */
+    const passcodeInput = document.getElementById('passcodeInput');
+    const passcodeError = document.getElementById('passcodeError');
+
+    function pressKey(num) {
+      if (passcodeInput.value.length < 4) {
+        passcodeInput.value += num;
+        playTone(450, 'sine', 0.08, 0.05);
+      }
+    }
+
+    function clearPasscode() {
+      passcodeInput.value = '';
+      passcodeError.innerText = '';
+    }
+
+    function backspaceKey() {
+      passcodeInput.value = passcodeInput.value.slice(0, -1);
+      passcodeError.innerText = '';
+    }
+
+    function fillHintYear() {
+      passcodeInput.value = '2000';
+      passcodeError.innerText = '';
+      playTone(520, 'sine', 0.1, 0.06);
+    }
+
+    function verifyPasscode() {
+      const val = passcodeInput.value.trim();
+      // Validates 4-digit year format (Default 2000, or any valid 4-digit birth year between 1940 and 2026)
+      const numericVal = parseInt(val, 10);
+      if (val.length === 4 && !isNaN(numericVal) && (numericVal >= 1940 && numericVal <= 2026)) {
+        passcodeError.innerText = '';
+        playCelebrationFanfare();
+        launchConfetti(1500);
+        transitionToStage(2, 3);
+      } else {
+        playTone(220, 'sawtooth', 0.25, 0.1);
+        passcodeError.innerText = 'Please enter a valid 4-digit birth year (e.g., 2000)';
+        passcodeInput.classList.add('animate-shake');
+        setTimeout(() => passcodeInput.classList.remove('animate-shake'), 500);
+      }
+    }
+
+    /* -------------------------------------------------------------
+       STAGE 3: "I Made Something For You" -> STAGE 4
+       ------------------------------------------------------------- */
+    function goToStage4(choice) {
+      playTone(660, 'triangle', 0.2, 0.08);
+      launchConfetti(1500);
+      transitionToStage(3, 4);
+    }
+
+    /* -------------------------------------------------------------
+       STAGE 4 & 5: GIFT HAMPERS AND MODALS
+       ------------------------------------------------------------- */
+    function openHamper(hamperId) {
+      playTone(700, 'sine', 0.15, 0.07);
+      const modal = document.getElementById(`modalHamper${hamperId}`);
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        launchConfetti(1200);
+      }
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    /* Lightbox Modal Helper */
+    function openLightbox(imgSrc, title, caption) {
+      const modal = document.getElementById('lightboxModal');
+      const img = document.getElementById('lightboxImage');
+      const titleEl = document.getElementById('lightboxTitle');
+      const captionEl = document.getElementById('lightboxCaption');
+      
+      img.src = imgSrc;
+      titleEl.innerText = title;
+      captionEl.innerText = caption;
+      
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      playTone(550, 'sine', 0.1, 0.05);
+    }
+
+    function closeLightbox() {
+      const modal = document.getElementById('lightboxModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    /* Candle Blow Logic */
+    let candlesBlown = false;
+    function blowCandles() {
+      if (candlesBlown) return;
+      candlesBlown = true;
+
+      // Hide flames and show smoke animation
+      ['1', '2', '3'].forEach(id => {
+        const flame = document.getElementById(`flame${id}`);
+        const smoke = document.getElementById(`smoke${id}`);
+        if (flame) flame.classList.add('hidden');
+        if (smoke) {
+          smoke.classList.remove('hidden');
+          smoke.classList.add('smoke-anim');
+        }
+      });
+
+      // Sound effect (blow whisper + celebration)
+      playTone(300, 'sine', 0.4, 0.1);
+      setTimeout(() => {
+        playCelebrationFanfare();
+      }, 300);
+
+      // Huge confetti shower
+      launchConfetti(3500);
+
+      // Swap button with blessing message
+      document.getElementById('candleInstructionText').innerText = "Your wish has been cast to the stars! ✨";
+      document.getElementById('blowActionArea').classList.add('hidden');
+      const blessing = document.getElementById('revealedBlessing');
+      blessing.classList.remove('hidden');
+    }
+
+    function relightCandles() {
+      candlesBlown = false;
+      ['1', '2', '3'].forEach(id => {
+        const flame = document.getElementById(`flame${id}`);
+        const smoke = document.getElementById(`smoke${id}`);
+        if (flame) flame.classList.remove('hidden');
+        if (smoke) {
+          smoke.classList.add('hidden');
+          smoke.classList.remove('smoke-anim');
+        }
+      });
+      document.getElementById('candleInstructionText').innerText = "Close your eyes, make your deepest wish, then blow the candles!";
+      document.getElementById('blowActionArea').classList.remove('hidden');
+      document.getElementById('revealedBlessing').classList.add('hidden');
+      playTone(500, 'triangle', 0.15, 0.08);
+    }
+
+    // Initialize Lucide icons and launch countdown upon window load
+    window.onload = function() {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+      startStage1Timer();
+    };
+  </script>
+</body>
+</html>
